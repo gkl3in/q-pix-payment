@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.klein.exceptions.QRCodeNotFoundException;
 import br.com.klein.model.Chave;
 import br.com.klein.model.LinhaDigitavel;
 import br.com.klein.model.qrcode.DadosEnvio;
@@ -26,9 +27,8 @@ public class PixService {
     private static final String QR_CODE_EXTENSION = ".png";
 
     public BufferedInputStream gerarQrCode(@NotNull final String uuid) throws IOException {
-        //TODO depois criar tratamento de exceção global, e no lugar do IOException, utilizar QRCodeNotFoundException
         File qrCodeFile = findQrCodeFile(uuid)
-            .orElseThrow(() -> new IOException("QR Code não encontrado para o UUID: " + uuid));
+            .orElseThrow(() -> new QRCodeNotFoundException("QR Code não encontrado para o UUID: " + uuid));
 
         return createBufferedInputStream(qrCodeFile);
     }
@@ -37,7 +37,6 @@ public class PixService {
             @NotNull final Chave chave, 
             @NotNull final BigDecimal valor, 
             @NotNull final String cidadeRemetente) {
-        
         validateInputs(chave, valor, cidadeRemetente);
         
         String uuid = generateUUID();

@@ -1,13 +1,16 @@
 package br.com.klein.api;
 
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import br.com.klein.model.Pix;
@@ -37,4 +40,11 @@ public class PixResource {
         return null;
     }
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("image/png")
+    @Path("/qrcode/{uuid}")
+    public Response qrCode(@PathParam("uuid") String uuid) throws IOException {
+        return Response.ok(pixService.gerarQrCode(uuid)).build();
+    }
 }

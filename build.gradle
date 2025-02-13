@@ -9,6 +9,11 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
+    implementation 'io.quarkus:quarkus-info'
+    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'commons-io:commons-io:2.13.0'
+    implementation 'org.json:json:20230618'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-resteasy-reactive'

@@ -31,12 +31,13 @@ public class RedisCache {
     }
 
     public Chave getOrSetIfAbsent(String key, Supplier<Chave> cachedObj) {
-        var cached = get(key);
+        Chave cached = get(key);
         if (Objects.nonNull(cached)) {
             return cached;
         } else {
-            var result = cachedObj.get();
+            Chave result = cachedObj.get();
             set(key, result);
+
             return result;
         }
     }

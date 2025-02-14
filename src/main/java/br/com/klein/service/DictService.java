@@ -1,9 +1,9 @@
 package br.com.klein.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import jakarta.inject.Inject;
 
-import com.oracle.svm.core.annotate.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import br.com.klein.config.RedisCache;
 import br.com.klein.model.Chave;

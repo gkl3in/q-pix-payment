@@ -13,6 +13,7 @@ import io.quarkus.logging.Log;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 @ApplicationScoped
 public class DictService {
@@ -42,10 +43,15 @@ public class DictService {
     }
 
     private Chave buscarChaveCache(String key) {
-        Chave chave = redisCache.get(key).get();
-        Log.infof("Chave encontrada no cache %s", chave);
+        Optional<Chave> optionalChave = redisCache.get(key);
 
-        return chave;
+        if (optionalChave.isPresent()) {
+            Chave chave = optionalChave.get();
+            Log.infof("Chave encontrada no cache %s", chave);
+            return chave;
+        }
+        Log.info("Chave não encontrada no cache");
+        return null;
     }
 
     public Chave buscarChave(String chave) {

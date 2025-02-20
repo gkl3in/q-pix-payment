@@ -9,7 +9,7 @@ services:
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_PASSWORD: gklein
       MONGO_INITDB_DATABASE: pix
     ports:
       - '27017-27019:27017-27019'
@@ -23,8 +23,8 @@ services:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
-      ME_CONFIG_MONGODB_URL: mongodb://root:pixklein@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINPASSWORD: gklein
+      ME_CONFIG_MONGODB_URL: mongodb://root:gklein@mongo:27017
 
 volumes:
   mongodbdata:

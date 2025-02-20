@@ -1,7 +1,10 @@
 package br.com.klein.repository;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.FindOneAndReplaceOptions;
+import com.mongodb.client.model.ReturnDocument;
 
 import br.com.klein.domain.TransactionConverterApply;
 import br.com.klein.model.Chave;
@@ -16,6 +19,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @ApplicationScoped
 public class TransacaoPixMongoClientRepository implements TransactionRepository{
@@ -36,16 +42,34 @@ public class TransacaoPixMongoClientRepository implements TransactionRepository{
                 .append(TransactionConverterApply.DATA, LocalDateTime.now(ZoneId.of(AMERICA_SAO_PAULO)));
                 getCollection().insertOne(document);
     }
+
     private MongoCollection<Document> getCollection() {
         return mongoClient.getDatabase("pix").getCollection("transacao_pix");
     }
+
     @Override
     public Optional<Transaction> alterarStatusTransacao(String uuid, StatusPix statusPix) {
+        Optional<Document> optionalDocument = findOne(uuid);
+        if (optionalDocument.isPresent()) {
+
+            var document = optionalDocument.get();
+            var opts = new FindOneAndReplaceOptions().upsert(false).returnDocument(ReturnDocument.AFTER);
+            document.merge(TransactionConverterApply.STATUS, statusPix, (a, b) -> b);
+            var replace = getCollection().findOneAndReplace(eq(TransactionConverterApply.ID, uuid),
+                    document, opts
+                    );
+            assert replace != null;
+
+            return Optional.of(TransactionConverterApply.apply(replace));
+        }
         return Optional.empty();
     }
 
     @Override
     public Optional<Document> findOne(String uuid) {
-        return Optional.empty();
+        var filter = eq(TransactionConverterApply.ID, uuid);
+        FindIterable<Document> documents = getCollection().find(filter);
+
+        return StreamSupport.stream(documents.spliterator(), false).findFirst();
     }
 }

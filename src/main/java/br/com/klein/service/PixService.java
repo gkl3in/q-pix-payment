@@ -1,6 +1,7 @@
 package br.com.klein.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,15 +13,25 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.klein.config.LinhaDigitavelCache;
+import br.com.klein.domain.TransactionDomain;
 import br.com.klein.exceptions.QRCodeNotFoundException;
 import br.com.klein.model.Chave;
 import br.com.klein.model.LinhaDigitavel;
+import br.com.klein.model.Transaction;
 import br.com.klein.model.qrcode.DadosEnvio;
 import br.com.klein.model.qrcode.QrCode;
 import io.smallrye.common.constraint.NotNull;
 
 @ApplicationScoped
 public class PixService {
+
+    @Inject
+    TransactionDomain transactionDomain;
+
+    @Inject
+    LinhaDigitavelCache linhaDigitavelCache;
+
 
     private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
     private static final String QR_CODE_PREFIX = "qrcode-pix-";
@@ -44,8 +55,31 @@ public class PixService {
         
         Path filePath = createTemporaryFile(uuid);
         qrCode.save(filePath);
+        var linhaDigitavel = new LinhaDigitavel(qrCode.toString(), uuid);
 
-        return new LinhaDigitavel(qrCode.toString(), uuid);
+        salvarLinhaDigitavel(chave, valor, linhaDigitavel);
+
+        return linhaDigitavel;
+    }
+
+    public Optional<Transaction> findById(final String uuid) {
+        return transactionDomain.findById(uuid);
+    }
+
+    public Optional<Transaction> aprovarTransacao(final String uuid) {
+        return transactionDomain.aprovarTransacao(uuid);
+    }
+
+    public Optional<Transaction> reprovarTransacao(final String uuid) {
+        return transactionDomain.reprovarTransacao(uuid);
+    }
+
+    private void salvarLinhaDigitavel(Chave chave, BigDecimal valor, LinhaDigitavel linhaDigitavel) {
+        transactionDomain.adicionarTransacao(linhaDigitavel, valor, chave);
+        linhaDigitavelCache.set(linhaDigitavel.uuid(), linhaDigitavel);
+    }
+
+    private void processarPix() {
     }
 
     private Optional<File> findQrCodeFile(String uuid) {

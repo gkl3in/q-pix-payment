@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -126,5 +128,9 @@ public class PixService {
 
     private QrCode createQrCode(Chave chave, BigDecimal valor, String cidadeRemetente) {
         return new QrCode(new DadosEnvio(chave, valor, cidadeRemetente));
+    }
+
+    public List<Transaction> buscarTransacoes(final Date dataInicio, final Date dataFim) {
+        return transactionDomain.buscarTransacoes(dataInicio ,dataFim);
     }
 }

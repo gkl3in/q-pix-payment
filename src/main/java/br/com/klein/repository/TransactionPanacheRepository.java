@@ -12,7 +12,10 @@ import br.com.klein.model.Transaction;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static br.com.klein.repository.TransacaoPixMongoClientRepository.AMERICA_SAO_PAULO;
 
@@ -46,5 +49,10 @@ public class TransactionPanacheRepository implements PanacheMongoRepository<Tran
 
     public Optional<Transaction> findOne(String uuid) {
         return find(TransactionConverterApply.ID, uuid).stream().findFirst();
+    }
+
+    public List<Transaction> buscarTransacoes(final Date dataInicio, final Date dataFim) {
+        return find("data >= ?1 and data <= ?2 and status = ?3",  dataInicio, dataFim, StatusPix.APPROVED)
+                .stream().collect(Collectors.toList());
     }
 }

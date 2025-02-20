@@ -5,6 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import br.com.klein.model.Chave;
@@ -18,7 +20,6 @@ public class TransactionDomain {
     @Inject
     TransactionPanacheRepository repository;
 
-    @Transactional
     public void adicionarTransacao(final LinhaDigitavel linhaDigitavel, final BigDecimal valor, final Chave chave) {
         repository.adicionar(linhaDigitavel, valor, chave);
     }
@@ -41,5 +42,9 @@ public class TransactionDomain {
 
     public Optional<Transaction> findById(final String uuid) {
         return repository.findOne(uuid);
+    }
+
+    public List<Transaction> buscarTransacoes(final Date dataInicio, final Date dataFim) {
+        return repository.buscarTransacoes(dataInicio, dataFim);
     }
 }

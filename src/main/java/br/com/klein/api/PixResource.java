@@ -89,7 +89,6 @@ public class PixResource {
             @APIResponse(responseCode = "404", description = "Recurso não encontrado")
     })
     public Response buscarPix(@PathParam("uuid") String uuid) {
-
         return Response.ok(pixService.findById(uuid)).build();
     }
 
@@ -107,7 +106,6 @@ public class PixResource {
             @APIResponse(responseCode = "404", description = "Recurso não encontrado")
     })
     public Response aprovarPix(@PathParam("uuid") String uuid) {
-
         return Response.ok(pixService.aprovarTransacao(uuid).get()).build();
     }
 
@@ -125,7 +123,6 @@ public class PixResource {
             @APIResponse(responseCode = "404", description = "Recurso não encontrado")
     })
     public Response reprovarPix(@PathParam("uuid") String uuid) {
-
         return Response.ok(pixService.reprovarTransacao(uuid).get()).build();
     }
 }

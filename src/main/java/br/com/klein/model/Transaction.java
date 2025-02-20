@@ -2,11 +2,15 @@ package br.com.klein.model;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.common.MongoEntity;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Transaction {
+@MongoEntity(collection = "transacao_pix")
+public class Transaction extends PanacheMongoEntity {
 
     @Override
     public boolean equals(Object o) {

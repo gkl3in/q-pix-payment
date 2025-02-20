@@ -7,18 +7,16 @@ import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import org.bson.Document;
-
 import br.com.klein.model.Chave;
 import br.com.klein.model.LinhaDigitavel;
 import br.com.klein.model.StatusPix;
 import br.com.klein.model.Transaction;
-import br.com.klein.repository.TransacaoPixMongoClientRepository;
+import br.com.klein.repository.TransactionPanacheRepository;
 
 @ApplicationScoped
 public class TransactionDomain {
     @Inject
-    TransacaoPixMongoClientRepository repository;
+    TransactionPanacheRepository repository;
 
     @Transactional
     public void adicionarTransacao(final LinhaDigitavel linhaDigitavel, final BigDecimal valor, final Chave chave) {
@@ -42,7 +40,6 @@ public class TransactionDomain {
     }
 
     public Optional<Transaction> findById(final String uuid) {
-        Optional<Document> optionalDocument = repository.findOne(uuid);
-        return optionalDocument.map(TransactionConverterApply::apply);
+        return repository.findOne(uuid);
     }
 }

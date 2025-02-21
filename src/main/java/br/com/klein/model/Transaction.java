@@ -102,4 +102,12 @@ public class Transaction extends PanacheMongoEntity {
     }
 
     private LocalDateTime data;
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id='" + id + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

@@ -160,5 +160,4 @@ public class PixResource {
         return Response.ok(pixService.buscarTransacoes(DATE_FORMAT.parse(dataInicio),
                 DATE_FORMAT.parse(dataFim))).build();
     }
-
 }

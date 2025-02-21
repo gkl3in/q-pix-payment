@@ -9,8 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.quarkiverse.amazonservices:quarkus-amazon-s3'
-    implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-amazon-services-bom:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-mongodb-panache'
     implementation 'io.quarkus:quarkus-mongodb-client'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
